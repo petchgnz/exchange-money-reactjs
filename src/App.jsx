@@ -8,6 +8,7 @@ function App() {
   const [amount1, setAmount1] = useState(1);
   const [amount2, setAmount2] = useState(1);
   const [rates, setRates] = useState(1);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -16,8 +17,10 @@ function App() {
         );
         const data = await res.json();
         const newRate = data.conversion_rates[currency2];
+        const rateText= `1 ${currency1} = ${newRate} ${currency2}`
 
         setAmount2((amount1 * newRate).toFixed(2));
+        setRates(rateText);
       } catch (err) {
         console.log("Failed to fetch: ", err);
       }
@@ -118,67 +121,23 @@ function App() {
             onChange={(e) => setAmount1(e.target.value)}
           />
         </div>
+
+        {/* Rate Text */}
         <div className="flex justify-end pr-10">
           <div className="text-md inline-block pr-2">{rates}</div>
         </div>
+
         <div className="my-4">
           <select
             className="appearance-none p-2 transition-all ease-in-out rounded bg-gray-200 cursor-pointer mr-2 hover:bg-gray-300"
             onChange={(e) => setCurrency2(e.target.value)}
             value={currency2}
           >
-            <option value="AED">AED</option>
-            <option value="ARS">ARS</option>
-            <option value="AUD">AUD</option>
-            <option value="BGN">BGN</option>
-            <option value="BRL">BRL</option>
-            <option value="BSD">BSD</option>
-            <option value="CAD">CAD</option>
-            <option value="CHF">CHF</option>
-            <option value="CLP">CLP</option>
-            <option value="CNY">CNY</option>
-            <option value="COP">COP</option>
-            <option value="CZK">CZK</option>
-            <option value="DKK">DKK</option>
-            <option value="DOP">DOP</option>
-            <option value="EGP">EGP</option>
-            <option value="EUR">EUR</option>
-            <option value="FJD">FJD</option>
-            <option value="GBP">GBP</option>
-            <option value="GTQ">GTQ</option>
-            <option value="HKD">HKD</option>
-            <option value="HRK">HRK</option>
-            <option value="HUF">HUF</option>
-            <option value="IDR">IDR</option>
-            <option value="ILS">ILS</option>
-            <option value="INR">INR</option>
-            <option value="ISK">ISK</option>
-            <option value="JPY">JPY</option>
-            <option value="KRW">KRW</option>
-            <option value="KZT">KZT</option>
-            <option value="MXN">MXN</option>
-            <option value="MYR">MYR</option>
-            <option value="NOK">NOK</option>
-            <option value="NZD">NZD</option>
-            <option value="PAB">PAB</option>
-            <option value="PEN">PEN</option>
-            <option value="PHP">PHP</option>
-            <option value="PKR">PKR</option>
-            <option value="PLN">PLN</option>
-            <option value="PYG">PYG</option>
-            <option value="RON">RON</option>
-            <option value="RUB">RUB</option>
-            <option value="SAR">SAR</option>
-            <option value="SEK">SEK</option>
-            <option value="SGD">SGD</option>
-            <option value="THB">THB</option>
-            <option value="TRY">TRY</option>
-            <option value="TWD">TWD</option>
-            <option value="UAH">UAH</option>
-            <option value="USD">USD</option>
-            <option value="UYU">UYU</option>
-            <option value="VND">VND</option>
-            <option value="ZAR">ZAR</option>
+            {currencies.map((data) => (
+              <option key={data} value={data}>
+                {data}
+              </option>
+            ))}
           </select>
           <input
             type="text"
@@ -196,7 +155,10 @@ function App() {
           >
             Swap
           </button>
-          <button className="rounded-br-xl cursor-pointer transition-all ease-in-out hover:bg-red-600 bg-red-500 text-white roudned p-2">
+          <button 
+            className="rounded-br-xl cursor-pointer transition-all ease-in-out hover:bg-red-600 bg-red-500 text-white roudned p-2"
+            onClick={handleReset}
+          >
             Reset
           </button>
         </div>
